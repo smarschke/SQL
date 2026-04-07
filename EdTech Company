@@ -138,3 +138,65 @@ INSERT INTO AuthorTextbookLink (AuthorID, TextbookID) VALUES
 (25, 1),
 (26, 19);
 
+--Which books by which authors are currently being used in the company's economics curricula?
+--Show the textbook titles, author IDs, and author names for current economics textbooks. Only show textbooks that have authors in our database. 
+--Part 1: Find the titles of the current economics books.
+SELECT Textbooks.Title
+FROM Textbooks
+WHERE Textbooks.Subject = "Economics"
+AND Textbooks.Current = "Yes";
+
+--Part 2: Find the author IDs for economics textbooks that have authors. Your results should include the textbook name and author ID. 
+SELECT Textbooks.Title
+, AuthorTextbookLink.AuthorID
+FROM Textbooks
+JOIN AuthorTextbookLink
+ON Textbooks.TextbookID = AuthorTextbookLink.TextbookID
+WHERE Textbooks.Subject = "Economics"
+AND Textbooks.Current = "Yes";
+
+--Part 3: Find the names of the authors who wrote these economics textbooks. Your answer should include the textbook name, author ID, and the author's name. 
+SELECT Textbooks.Title
+, AuthorTextbookLink.AuthorID
+, Authors.Name
+FROM Textbooks
+
+INNER JOIN AuthorTextbookLink
+ON Textbooks.TextbookID = AuthorTextbookLink.TextbookID
+    
+INNER JOIN Authors
+ON AuthorTextbookLink.AuthorID = Authors.AuthorID
+
+WHERE Textbooks.Subject = "Economics"
+AND Textbooks.Current = "Yes";
+
+--For all the 12th grade courses, show the course name, textbook title, and author ID.
+SELECT Courses.CourseName
+, Textbooks.Title
+, AuthorTextbookLink.AuthorID
+FROM Courses
+
+LEFT OUTER JOIN Textbooks
+ON Courses.TextbookID = Textbooks.TextbookID
+
+LEFT OUTER JOIN AuthorTextbookLink
+ON Textbooks.TextbookID = AuthorTextbookLink.TextbookID
+
+WHERE Courses.GradeLevel = 12;
+
+--For 12th grade courses with textbooks, show the course name, textbook title, and author name. 
+SELECT Courses.CourseName
+, Textbooks.Title
+, Authors.Name
+FROM Courses
+
+INNER JOIN Textbooks
+ON Courses.TextbookID = Textbooks.TextbookID
+
+INNER JOIN AuthorTextbookLink
+ON Courses.TextbookID = AuthorTextbookLink.TextbookID
+
+INNER JOIN Authors
+ON AuthorTextbookLink.AuthorID = Authors.AuthorID 
+
+WHERE Courses.GradeLevel = 12; 
