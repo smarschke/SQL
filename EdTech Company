@@ -200,3 +200,22 @@ INNER JOIN Authors
 ON AuthorTextbookLink.AuthorID = Authors.AuthorID 
 
 WHERE Courses.GradeLevel = 12; 
+
+--Using the Textbooks table, make a list of all the textbooks. Include the subject, the current book title, and the out of date book title. Order the results by the current textbook title. 
+SELECT a.Subject
+, a.Title AS textbook
+, b.Title AS previous_version
+FROM Textbooks a
+LEFT OUTER JOIN Textbooks b
+ON a.TextbookID = b.UpdatedVersion
+ORDER BY textbook; 
+
+--Using the authors table, make a list of all the authors who are reviewing a book. Include the AuthorID, author’s name, and the name of the author being reviewed. 
+--Order the results by AuthorID for the reviewer (not the person being reviewed) in ascending order.
+SELECT authors.AuthorID
+, authors.Name Reviewer
+, peers.Name Being_reviewed
+FROM Authors authors
+INNER JOIN Authors peers
+ON authors.Reviewing = peers.AuthorID
+ORDER BY authors.AuthorID;
