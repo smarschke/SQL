@@ -1,0 +1,77 @@
+SELECT * FROM suspect_info LIMIT 5;
+SELECT * FROM vehicle_info LIMIT 5;
+SELECT * FROM associates_info LIMIT 5;
+SELECT * FROM location_info LIMIT 5;
+SELECT * FROM alibi_info LIMIT 5;
+
+--Query #1
+SELECT suspect_info.suspect_first_name
+, suspect_info.suspect_last_name
+, location_info.cell_location
+, location_info.date_time
+FROM suspect_info
+JOIN location_info ON suspect_info.suspect_id = location_info.suspect_id
+WHERE location_info.cell_location = 'Carnival City'
+AND location_info.date_time = '01/13/21 17:01';
+
+--Query #2
+SELECT suspect_info.suspect_first_name
+, suspect_info.suspect_last_name
+, associates_info.associate_alias
+, associates_info.occupation
+, associates_info.relationship_to_suspect
+FROM suspect_info
+JOIN associates_info ON suspect_info.suspect_id = associates_info.suspect_id
+WHERE associates_info.relationship_to_suspect = 'Friend'
+AND associates_info.occupation LIKE '%Specialist';
+
+--Query #3
+SELECT suspect_info.suspect_first_name
+, suspect_info.suspect_last_name
+, location_info.cell_location
+, vehicle_info.car_type
+, vehicle_info.license_plate
+FROM suspect_info
+JOIN location_info ON suspect_info.suspect_id = location_info.suspect_id
+JOIN vehicle_info ON suspect_info.suspect_id = vehicle_info.suspect_id
+WHERE vehicle_info.license_plate LIKE '%D0G'
+AND vehicle_info.car_type = 'Minivan'
+AND location_info.cell_location = 'Carnival City';
+
+--Query #4
+SELECT suspect_info.suspect_first_name
+, suspect_info.suspect_last_name
+, alibi_info.alibi_statement
+FROM suspect_info
+JOIN alibi_info ON suspect_info.suspect_id = alibi_info.suspect_id
+WHERE alibi_info.alibi_statement LIKE '%dog%'
+OR alibi_info.alibi_statement LIKE '%cotton%'
+OR alibi_info.alibi_statement LIKE '%candy%';
+
+--Query #5
+SELECT suspect_info.suspect_id
+, suspect_info.suspect_first_name
+, suspect_info.suspect_last_name
+, location_info.cell_location
+, alibi_info.alibi_location
+FROM suspect_info
+JOIN location_info ON suspect_info.suspect_id = location_info.suspect_id
+JOIN alibi_info ON suspect_info.suspect_id = alibi_info.suspect_id
+WHERE location_info.cell_location <> alibi_info.alibi_location; 
+
+--Final
+SELECT suspect_info.suspect_first_name
+, suspect_info.suspect_last_name
+, location_info.cell_location
+FROM suspect_info
+JOIN location_info ON suspect_info.suspect_id = location_info.suspect_id
+JOIN associates_info ON suspect_info.suspect_id = associates_info.suspect_id
+JOIN vehicle_info ON suspect_info.suspect_id = vehicle_info.suspect_id
+JOIN alibi_info ON suspect_info.suspect_id = alibi_info.suspect_id
+WHERE location_info.cell_location = 'Carnival City'
+AND location_info.date_time = '01/13/21 17:01'
+AND associates_info.occupation LIKE '%Specialist'
+AND associates_info.relationship_to_suspect = 'Friend'
+AND vehicle_info.car_type = 'Minivan'
+AND license_plate LIKE '%D0G'
+AND location_info.cell_location <> alibi_info.alibi_location;
